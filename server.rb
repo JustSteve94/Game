@@ -133,9 +133,9 @@ end
 Server.new( 3000, "localhost" )
 
 # Publish example
-MQTT::Client.connect('localhost') do |c|
-    file = File.open("c_brazil.png", 'rb')
-    message = file.read(SIZE)
-    file.close
- 	c.publish('country', message)
-end
+# MQTT::Client.connect('localhost') do |c|
+#     file = File.open("c_brazil.png", 'rb')
+#     message = file.read(SIZE)
+#     file.close
+#  	c.publish('country', message)
+# end
