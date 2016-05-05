@@ -18,15 +18,13 @@ class Client
 	    @response = Thread.new do
 	      loop {
 	        msg = @server.gets.chomp
-	        if msg.include? "Round"
-	        	puts msg
+	        puts msg
+	        if msg.include? 'Goodbye'
+	        	exit
+	        elsif msg.include? "Round"
 	        	receiveImage
 	        	next
 			end
-	        puts "#{msg}"
-	        if msg == 'This username already exist'
-	        	exit
-	        end
 	      }
 	    end
   	end

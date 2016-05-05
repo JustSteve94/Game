@@ -30,31 +30,34 @@ class Server
     loop {
       Thread.start(@server.accept) do | client |
       	client.puts 'Do you wanna play a game? (yes/no)'
-      	answ = client.gets.chomp.to_sym
+      	answ = client.gets.chomp
       	if answ == 'no'
+      		client.puts 'Goodbye!'
       		Thread.kill self
+      	elsif answ == 'yes'
+	      	accounts(client)
+	      	nick_name = @connections[:clients].key(client)
+	      	topic = topics(client, nick_name)
+	      	game(client, nick_name, topic)	
+      	else
+      		client.puts 'Please choose yes or no!'
+      		redo
       	end
-      	accounts(client)
-      	nick_name = @connections[:clients].key(client)
-      	topic = topics(client, nick_name)
-      	game(client, nick_name, topic)
-        listen_user_messages( nick_name, client )
       end
     }.join
   end
 
   def accounts(client)
-  	client.puts 'Enter your nick_name: '
-  	nick_name = client.gets.chomp.to_sym
-  	@connections[:clients].each do |other_name, other_client|
-          if nick_name == other_name || client == other_client
-            client.puts "This username already exist"
-            Thread.kill self
-        end
-    end
+  	client.puts 'Enter your nickname: '
+  	nick_name = client.gets.chomp
+  	while @connections[:clients].has_key?(nick_name) do
+  		client.puts 'This nickname already exist'
+  		client.puts 'Enter your nickname: '
+  		nick_name = client.gets.chomp
+ 	end
     puts "#{nick_name} #{client.peeraddr[1]}"
     @connections[:clients][nick_name] = client
-    client.puts "Connection established\n"  
+    client.puts "Connection established\n\n"  
   end
 
   def topics(client, nick_name)
@@ -116,18 +119,6 @@ class Server
     client.write "jump"+" "*1020
     client.puts "\nAnswer: "
   end
-
-  def listen_user_messages( username, client )
-    loop {
-      msg = client.gets.chomp
-      @connections[:clients].each do |other_name, other_client|
-        unless other_name == username
-          other_client.puts "#{username.to_s}: #{msg}"
-        end
-      end
-    }
-  end
-
 end
 
 Server.new( 3000, "localhost" )
