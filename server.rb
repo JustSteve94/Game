@@ -67,7 +67,7 @@ class Server
   	@connections[:topics][topic].push(nick_name)
   	puts @connections[:topics][topic]
   	puts "control"
-  	while @connections[:topics][topic].length < 1 do
+  	while @connections[:topics][topic].length < 2 do
   		client.puts "Please wait 10 sec for one more player."
   		sleep 10
   	end
@@ -89,7 +89,7 @@ class Server
 	    point += 1 if answ == @connections[:answers][name]
 	end
     @connections[:score][nick_name] = point
-	while @connections[:score].length < 1 do
+	while @connections[:score].length < 2 do
 		client.puts 'Wait 5 sec until other player finishes.'
 		sleep 5
 	end
