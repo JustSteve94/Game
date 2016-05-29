@@ -54,7 +54,7 @@ class Server
   		client.puts 'This nickname already exist'
   		client.puts 'Enter your nickname: '
   		nick_name = client.gets.chomp
- 	end
+   	end
     puts "#{nick_name} #{client.peeraddr[1]}"
     @connections[:clients][nick_name] = client
     client.puts "Connection established\n\n"  
@@ -77,8 +77,8 @@ class Server
   def game(client, nick_name, topic)
   	point = 0
   	win_points = 0
-	draw = false
-	win_name = ''
+	  draw = false
+	  win_name = ''
   	client.puts 'Game starts in 5 sec'
   	sleep 5
   	1.upto(3) do |round|
